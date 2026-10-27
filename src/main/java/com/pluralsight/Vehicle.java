@@ -3,7 +3,6 @@ package com.pluralsight;
 public class Vehicle {
 
     //. Add the vehicleID, makeModel, color, odoMeterReading, and price data members
-
     private long vehicleId;
     private String makeModel;
     private String color;
@@ -11,7 +10,7 @@ public class Vehicle {
     private double price;
 
     //. Create the constructors for data
-    public Vehicle(long vehicleID, String makeModel, String color, int odometerReading, double price) {
+    public Vehicle(long vehicleId, String makeModel, String color, int odometerReading, double price) {
         this.vehicleId = vehicleId;
         this.makeModel = makeModel;
         this.color = color;
@@ -36,6 +35,12 @@ public class Vehicle {
     }
 
     public long getVehicleId() {
-        return this.vehicleId;
+        return vehicleId;
+    }
+
+    public void display() {
+        System.out.printf("VIN: %d, Make/Model: %s, Color: %s, Mileage: %d, Price: %.2f%n",
+                getVehicleId(), this.makeModel, this.color, this.odometerReading, this.price);
+
     }
 }
