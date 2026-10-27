@@ -1,29 +1,22 @@
 package com.pluralsight;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class VehicleInventoryApp {
 
     public static void main(String[] args) {
         Scanner myScanner = new Scanner(System.in);
-        Vehicle car = new Vehicle(101121L, "Ford Explorer", "Red", 45000, 13500.0);
+        Vehicle[] cars = new Vehicle[20];
 
-        ArrayList<Vehicle> vehicles = new ArrayList<Vehicle>();
-        vehicles = new ArrayList<Vehicle>();
+        // Initialize arrays for 6 cars
+        cars[0] = new Vehicle(101121, "Ford Explorer", "Red", 45000, 13500);
+        cars[1] = new Vehicle(101122, "Toyota Camry", "Blue", 60000, 11000);
+        cars[2] = new Vehicle(101123, "Chevrolet Malibu", "Black", 50000, 9700);
+        cars[3] = new Vehicle(101124, "Honda Civic", "White", 70000, 7500);
+        cars[4] = new Vehicle(101125, "Subaru Outback", "Green", 55000, 14500);
+        cars[5] = new Vehicle(101126, "Jeep Wrangler", "Yellow", 30000, 16000);
 
-        vehicles.add(new Vehicle(101122L, "Toyota Camry", "Blue", 60000, 11000.0));
-
-        vehicles.add(car);
-
-        for (Vehicle currentVehicle : vehicles) {
-            System.out.println(currentVehicle.getColor());
-        }
-
-        for (Vehicle currentVehicle : vehicles) {
-            System.out.println(currentVehicle.getColor());
-        }
-
+        // Add and display menu prompt
         String menuPrompt = """
                 What do you want to do?
                 1 - List all vehicles
@@ -37,25 +30,26 @@ public class VehicleInventoryApp {
         while (true) {
             System.out.print(menuPrompt);
             String userInput = myScanner.nextLine();
-            // Removed: int userInteger = Integer.parseInt(userInput);
+            int spotsFilled = getFilledSpots(cars);
 
             switch (userInput) {
                 case "1" -> {
-                    for (Vehicle currentVehicle : vehicles) {
-                        currentVehicle.display();
+                    for (int i = 0; i < spotsFilled; i++) {
+                        cars[i].display();
                     }
                 }
                 case "2" -> {
                     System.out.print("Enter make/model to search for: ");
                     String searchmakeModel = myScanner.nextLine();
-                    for (Vehicle currentVehicle : vehicles) {
-                        if (currentVehicle.getMakeModel().equalsIgnoreCase(searchmakeModel)) {
+
+                    for (int i = 0; i < spotsFilled; i++) {
+                        if (cars[i].getMakeModel().equalsIgnoreCase(searchmakeModel)) {
                             System.out.printf("VIN: %d, Make/Model: %s, Color: %s, Mileage: %d, Price: %.2f%n",
-                                    currentVehicle.getVehicleId(),
-                                    currentVehicle.getMakeModel(),
-                                    currentVehicle.getColor(),
-                                    currentVehicle.getOdometerReading(),
-                                    currentVehicle.getPrice());
+                                    cars[i].getVehicleId(),
+                                    cars[i].getMakeModel(),
+                                    cars[i].getColor(),
+                                    cars[i].getOdometerReading(),
+                                    cars[i].getPrice());
                         }
                     }
                 }
@@ -66,11 +60,9 @@ public class VehicleInventoryApp {
                     System.out.print("Enter maximum price: ");
                     double maxPrice = myScanner.nextDouble();
 
-                    // Consume the leftover newline from nextDouble() to prevent issues
-                    // if we add a loop later, though currently safe without one.
                     myScanner.nextLine();
 
-                    for (Vehicle currentVehicle : vehicles) {
+                    for (Vehicle currentVehicle : cars) {
                         double price = currentVehicle.getPrice();
                         if (price >= minPrice && price <= maxPrice) {
                             System.out.printf("Make/Model: %s, Price: %.2f%n",
@@ -83,7 +75,7 @@ public class VehicleInventoryApp {
                     System.out.print("Enter color to search for: ");
                     String searchColor = myScanner.nextLine();
 
-                    for (Vehicle currentVehicle : vehicles) {
+                    for (Vehicle currentVehicle : cars) {
                         if (currentVehicle.getColor().equalsIgnoreCase(searchColor)) {
                             System.out.printf("Make/Model: %s, Color: %s%n",
                                     currentVehicle.getMakeModel(),
@@ -110,14 +102,27 @@ public class VehicleInventoryApp {
                     String priceInput = myScanner.nextLine();
                     double price = Double.parseDouble(priceInput);
 
-                    Vehicle newCar = new Vehicle(id, makeModel, color, odometerReading, price);
-                    vehicles.add(newCar);
+                    cars[spotsFilled] = new Vehicle(id, makeModel, color, odometerReading, price);
                     System.out.println("Vehicle added successfully!");
                 }
-                case "6" -> System.out.println("Quit.");
+                case "6" -> {
+                    System.out.println("Quit.");
+                    return;
+                }
                 default -> System.out.println("Invalid command.");
             }
         }
+    }
+
+    // Static method for the for loops to add new cars + return when ran through
+    public static int getFilledSpots(Vehicle[] cars) {
+        int filled = 0;
+        for (Vehicle car : cars) {
+            if (car != null) {
+                filled++;
+            }
+        }
+        return filled;
     }
 }
 
